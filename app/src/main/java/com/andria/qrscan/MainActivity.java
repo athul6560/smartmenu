@@ -111,7 +111,18 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    @Override
+    protected void onStart() {
+        super.onStart();
+        if (checkPermission()) {
 
+          
+
+        } else {
+            requestPermission();
+        }
+
+    }
 
     private boolean checkPermission() {
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA)
