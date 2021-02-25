@@ -1,6 +1,5 @@
 package com.andria.qrscan;
 
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
@@ -36,11 +35,10 @@ import java.io.IOException;
 
 public class MainActivity extends AppCompatActivity {
 
-    Animation blink,slide_up;
-    ImageView imageView,logo;
+    Animation blink, slide_up;
+    ImageView imageView, logo;
     LinearLayout ll_logo;
-    RelativeLayout ll_qr;
-    SurfaceView surfaceView;
+
     private GestureDetectorCompat gestureDetectorCompat;
     private final static int PERMISSION_REQUEST_CODE = 200;
 
@@ -48,16 +46,14 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        imageView=findViewById(R.id.imageView);
-        logo=findViewById(R.id.logo);
-        ll_logo=findViewById(R.id.ll_logo);
-        ll_qr=findViewById(R.id.ll_qr);
-        surfaceView = (SurfaceView) findViewById(R.id.camerap);
+        imageView = findViewById(R.id.imageView);
+        logo = findViewById(R.id.logo);
+        ll_logo = findViewById(R.id.ll_logo);
 
         blink = AnimationUtils.loadAnimation(getApplicationContext(),
                 R.anim.blink);
         slide_up = AnimationUtils.loadAnimation(getApplicationContext(),
-                R.anim.slide_up);
+                R.anim.slide_in_up);
 
         imageView.startAnimation(blink);
 
@@ -79,36 +75,20 @@ public class MainActivity extends AppCompatActivity {
         @Override
         public boolean onFling(MotionEvent event1, MotionEvent event2,
                                float velocityX, float velocityY) {
-
-          //
-
-
-            if(event2.getY() < event1.getY()){
-               // Toast.makeText(MainActivity.this, "Swiped", Toast.LENGTH_SHORT).show();
-                /*Intent intent = new Intent(
-                        MainActivity.this, Status.class);
-                startActivity(intent);*/
-                ll_logo.setVisibility(View.GONE);
-                ll_qr.setVisibility(View.VISIBLE);
-
+            if (event2.getY() < event1.getY()) {
                 if (checkPermission()) {
-                    createcamerasourse();
-                    //main logic or main code
-
-                    // . write your main code to execute, It will execute if the permission is already given.
+                    Intent i2 = new Intent(MainActivity.this, QRActivity.class);
+                    startActivity(i2);
+                    overridePendingTransition(R.anim.slide_in_up, R.anim.slide_out_up);
+                    finish();
 
                 } else {
                     requestPermission();
                 }
-
-
-
             }
 
             return true;
         }
-
-
 
 
     }
@@ -118,7 +98,6 @@ public class MainActivity extends AppCompatActivity {
         super.onStart();
         if (checkPermission()) {
 
-          
 
         } else {
             requestPermission();
@@ -150,7 +129,7 @@ public class MainActivity extends AppCompatActivity {
                     Toast.makeText(getApplicationContext(), "Permission Granted", Toast.LENGTH_SHORT).show();
 
                     // main logic
-                    createcamerasourse();
+
                 } else {
                     Toast.makeText(getApplicationContext(), "Permission Denied", Toast.LENGTH_SHORT).show();
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
@@ -180,61 +159,5 @@ public class MainActivity extends AppCompatActivity {
                 .create()
                 .show();
     }
-    private void createcamerasourse() {
-        BarcodeDetector barcodeDetector = new BarcodeDetector.Builder(this).build();
-        final CameraSource cameraSource = new CameraSource.Builder(this, barcodeDetector)
-                .setAutoFocusEnabled(true)
-                .setRequestedPreviewSize(1600, 1024)
-                .build();
-        surfaceView.getHolder().addCallback(new SurfaceHolder.Callback() {
-            @Override
-            public void surfaceCreated(SurfaceHolder holder) {
-                /*if (ActivityCompat.checkSelfPermission(MainActivity.this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {*/
-                if (ContextCompat.checkSelfPermission(MainActivity.this, Manifest.permission.CAMERA)
-                        != PackageManager.PERMISSION_GRANTED) {
-                    // TODO: Consider calling
-                    //    ActivityCompat#requestPermissions
-                    // here to request the missing permissions, and then overriding
-                    //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-                    //                                          int[] grantResults)
-                    // to handle the case where the user grants the permission. See the documentation
-                    // for ActivityCompat#requestPermissions for more details.
 
-                    return;
-                }
-                try {
-                    cameraSource.start(surfaceView.getHolder());
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-
-            @Override
-            public void surfaceChanged(SurfaceHolder holder, int format, int width, int height) {
-
-            }
-
-            @Override
-            public void surfaceDestroyed(SurfaceHolder holder) {
-                cameraSource.stop();
-            }
-        });
-        barcodeDetector.setProcessor(new Detector.Processor<Barcode>() {
-            @Override
-            public void release() {
-
-            }
-
-            @Override
-            public void receiveDetections(Detector.Detections<Barcode> detections) {
-                final SparseArray<Barcode> barcodeSparseArray = detections.getDetectedItems();
-                if (barcodeSparseArray.size() > 0) {
-                    Intent intent = new Intent();
-                    intent.putExtra("barcode", barcodeSparseArray.valueAt(0));
-                    setResult(CommonStatusCodes.SUCCESS, intent);
-                    finish();
-                }
-            }
-        });
-    }
 }
