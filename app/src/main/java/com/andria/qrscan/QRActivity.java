@@ -84,10 +84,11 @@ public class QRActivity extends AppCompatActivity {
             public void receiveDetections(Detector.Detections<Barcode> detections) {
                 final SparseArray<Barcode> barcodeSparseArray = detections.getDetectedItems();
                 if (barcodeSparseArray.size() > 0) {
-                    Intent intent = new Intent();
-                    intent.putExtra("barcode", barcodeSparseArray.valueAt(0));
-                    setResult(CommonStatusCodes.SUCCESS, intent);
+
+                    Intent i2 = new Intent(QRActivity.this, WelcomeActivity.class);
+                    startActivity(i2);
                     finish();
+
                 }
             }
         });
