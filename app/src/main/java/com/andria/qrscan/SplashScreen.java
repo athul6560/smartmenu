@@ -12,28 +12,15 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
-import android.util.SparseArray;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
-import android.view.SurfaceHolder;
-import android.view.SurfaceView;
-import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 import android.widget.Toast;
 
-import com.google.android.gms.common.api.CommonStatusCodes;
-import com.google.android.gms.vision.CameraSource;
-import com.google.android.gms.vision.Detector;
-import com.google.android.gms.vision.barcode.Barcode;
-import com.google.android.gms.vision.barcode.BarcodeDetector;
-
-import java.io.IOException;
-
-public class MainActivity extends AppCompatActivity {
+public class SplashScreen extends AppCompatActivity {
 
     Animation blink, slide_up;
     ImageView imageView, logo;
@@ -77,7 +64,7 @@ public class MainActivity extends AppCompatActivity {
                                float velocityX, float velocityY) {
             if (event2.getY() < event1.getY()) {
                 if (checkPermission()) {
-                    Intent i2 = new Intent(MainActivity.this, QRActivity.class);
+                    Intent i2 = new Intent(SplashScreen.this, QRActivity.class);
                     startActivity(i2);
                     overridePendingTransition(R.anim.slide_in_up, R.anim.slide_out_up);
                     finish();
@@ -152,7 +139,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void showMessageOKCancel(String message, DialogInterface.OnClickListener okListener) {
-        new AlertDialog.Builder(MainActivity.this)
+        new AlertDialog.Builder(SplashScreen.this)
                 .setMessage(message)
                 .setPositiveButton("OK", okListener)
                 .setNegativeButton("Cancel", null)

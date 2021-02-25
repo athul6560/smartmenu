@@ -7,6 +7,7 @@ import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.SparseArray;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
@@ -23,12 +24,13 @@ import java.io.IOException;
 public class QRActivity extends AppCompatActivity {
     RelativeLayout ll_qr;
     SurfaceView surfaceView;
+    boolean alreadyExecuted=false;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_q_r);
 
-        ll_qr=findViewById(R.id.ll_qr);
+        ll_qr = findViewById(R.id.ll_qr);
         surfaceView = (SurfaceView) findViewById(R.id.camerap);
 
         createcamerasourse();
@@ -85,9 +87,18 @@ public class QRActivity extends AppCompatActivity {
                 final SparseArray<Barcode> barcodeSparseArray = detections.getDetectedItems();
                 if (barcodeSparseArray.size() > 0) {
 
-                    Intent i2 = new Intent(QRActivity.this, WelcomeActivity.class);
-                    startActivity(i2);
-                    finish();
+                    if(!alreadyExecuted) {
+                        Intent i2 = new Intent(QRActivity.this, WelcomeActivity.class);
+
+                        startActivity(i2);
+
+                        alreadyExecuted = true;
+                        finish();
+                    }
+
+
+
+
 
                 }
             }
