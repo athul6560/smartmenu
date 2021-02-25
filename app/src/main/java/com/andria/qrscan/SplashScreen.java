@@ -22,9 +22,7 @@ import android.widget.Toast;
 
 public class SplashScreen extends AppCompatActivity {
 
-    Animation blink, slide_up;
-    ImageView imageView, logo;
-    LinearLayout ll_logo;
+
 
     private GestureDetectorCompat gestureDetectorCompat;
     private final static int PERMISSION_REQUEST_CODE = 200;
@@ -33,16 +31,11 @@ public class SplashScreen extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        imageView = findViewById(R.id.imageView);
-        logo = findViewById(R.id.logo);
-        ll_logo = findViewById(R.id.ll_logo);
 
-        blink = AnimationUtils.loadAnimation(getApplicationContext(),
-                R.anim.blink);
-        slide_up = AnimationUtils.loadAnimation(getApplicationContext(),
-                R.anim.slide_in_up);
 
-        imageView.startAnimation(blink);
+
+
+
 
         gestureDetectorCompat = new GestureDetectorCompat(this, new MyGestureListener());
 

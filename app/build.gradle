@@ -29,7 +29,7 @@ android {
 }
 
 dependencies {
-
+    def lottieVersion = "3.4.0"
     implementation 'androidx.appcompat:appcompat:1.2.0'
     implementation 'com.google.android.material:material:1.2.1'
     implementation 'androidx.constraintlayout:constraintlayout:2.0.4'
@@ -38,4 +38,6 @@ dependencies {
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
     /** QR scanner  **/
     implementation 'com.google.android.gms:play-services-vision:15.0.2'
+
+    implementation "com.airbnb.android:lottie:$lottieVersion"
 }
