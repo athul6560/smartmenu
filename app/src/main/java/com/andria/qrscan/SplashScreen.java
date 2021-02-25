@@ -12,10 +12,13 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
+import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.view.animation.ScaleAnimation;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Toast;
@@ -23,15 +26,33 @@ import android.widget.Toast;
 public class SplashScreen extends AppCompatActivity {
 
 
-
+    private ImageView firstBox, secondBox, thirdBox;
     private GestureDetectorCompat gestureDetectorCompat;
     private final static int PERMISSION_REQUEST_CODE = 200;
+    private final static int TIME = 200;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        firstBox = findViewById(R.id.imageView2);
+        secondBox = findViewById(R.id.imageView3);
+        thirdBox = findViewById(R.id.imageView4);
 
+
+        animation(firstBox);
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                animation(secondBox);
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        animation(thirdBox);
+                    }
+                }, TIME);
+            }
+        }, TIME);
 
 
 
@@ -42,6 +63,15 @@ public class SplashScreen extends AppCompatActivity {
         //push to check the branch creation
 
     }
+
+    private void animation(ImageView firstbox) {
+        firstbox.setVisibility(View.VISIBLE);
+        ScaleAnimation fade_in = new ScaleAnimation(0f, 1f, 0f, 1f, Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f);
+        fade_in.setDuration(500);
+        fade_in.setFillAfter(true);
+        firstbox.startAnimation(fade_in);
+    }
+
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
