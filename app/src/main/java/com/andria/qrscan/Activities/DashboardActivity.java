@@ -1,8 +1,10 @@
-package com.andria.qrscan;
+package com.andria.qrscan.Activities;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
+
+import com.andria.qrscan.R;
 
 public class DashboardActivity extends AppCompatActivity {
 

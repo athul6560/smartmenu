@@ -13,12 +13,12 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.QRScan">
-        <activity android:name=".DashboardActivity">
+        <activity android:name=".Activities.DashboardActivity">
 
         </activity>
-        <activity android:name=".WelcomeActivity" />
-        <activity android:name=".QRActivity" />
-        <activity android:name=".SplashScreen">
+        <activity android:name=".Activities.WelcomeActivity" />
+        <activity android:name=".Activities.QRActivity" />
+        <activity android:name=".Activities.SplashScreen">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
