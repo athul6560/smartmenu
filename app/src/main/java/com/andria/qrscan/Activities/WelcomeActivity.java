@@ -28,8 +28,6 @@ public class WelcomeActivity extends AppCompatActivity {
 
         Gson gson = new Gson();
         String json = SmartMenuUtil.getItem(WelcomeActivity.this);
-
-
         myObject= gson.fromJson(json, ItemModel.class);
         itemDetailModel=myObject.getItems();
 
