@@ -11,6 +11,7 @@ import android.widget.Toast;
 import com.andria.qrscan.Adapter.CategoryListAdapter;
 import com.andria.qrscan.Model.ItemDetailModel;
 import com.andria.qrscan.R;
+import com.andria.qrscan.Utils.SmartMenuUtil;
 
 import org.json.JSONArray;
 import org.json.JSONException;

@@ -17,6 +17,7 @@ import android.widget.Toast;
 
 
 import com.andria.qrscan.R;
+import com.andria.qrscan.Utils.SmartMenuUtil;
 import com.google.android.gms.common.api.CommonStatusCodes;
 import com.google.android.gms.vision.CameraSource;
 import com.google.android.gms.vision.Detector;
