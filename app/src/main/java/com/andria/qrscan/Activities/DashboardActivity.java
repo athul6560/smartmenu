@@ -46,7 +46,7 @@ public class DashboardActivity extends AppCompatActivity {
                 item.setCategory(itemobject.getString("category"));
                 item.setDishName(itemobject.getString("dishName"));
                 item.setImage_url(itemobject.getString("image_url"));
-                item.setOffer_price(itemobject.getInt("offer_price"));
+              //  item.setOffer_price(itemobject.getInt("offer_price"));
                 item.setPrice(itemobject.getInt("price"));
                 itemDetailModel.add(item);
 

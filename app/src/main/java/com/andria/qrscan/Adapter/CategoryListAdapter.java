@@ -1,6 +1,7 @@
 package com.andria.qrscan.Adapter;
 
 import android.content.Context;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -35,11 +36,12 @@ public class CategoryListAdapter extends RecyclerView.Adapter<CategoryListAdapte
     public void onBindViewHolder(ViewHolder holder, int position) {
 
         holder.txt_cat.setText(itemDetailModel.get(position).getCategory());
-       /* if(itemDetailModel.get(position).getImage_url()==null){
-
+        if(TextUtils.isEmpty(itemDetailModel.get(position).getImage_url())){
+            Picasso.get().load(R.drawable.no_img).into(holder.img_cat);
         }else {
             Picasso.get().load(itemDetailModel.get(position).getImage_url()).into(holder.img_cat);
-        }*/
+
+        }
 
     }
 
