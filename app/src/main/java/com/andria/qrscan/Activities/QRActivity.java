@@ -100,7 +100,7 @@ public class QRActivity extends AppCompatActivity {
                     SharedPreferences mPrefs = getPreferences(MODE_PRIVATE);
 
                     ItemModel myObject = new ItemModel();
-//set variables of 'myObject', etc.
+
 
 
                     Gson gson = new Gson();
