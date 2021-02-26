@@ -7,12 +7,14 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.andria.qrscan.Model.ItemDetailModel;
 import com.andria.qrscan.R;
+import com.bumptech.glide.Glide;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
@@ -36,12 +38,13 @@ public class CategoryListAdapter extends RecyclerView.Adapter<CategoryListAdapte
     public void onBindViewHolder(ViewHolder holder, int position) {
 
         holder.txt_cat.setText(itemDetailModel.get(position).getCategory());
-        if(TextUtils.isEmpty(itemDetailModel.get(position).getImage_url())){
-            Picasso.get().load(R.drawable.no_img).into(holder.img_cat);
-        }else {
-            Picasso.get().load(itemDetailModel.get(position).getImage_url()).into(holder.img_cat);
+        Glide
+                .with(context)
+                .load(itemDetailModel.get(position).image_url)
+                .centerCrop()
+                .placeholder(R.drawable.no_img)
+                .into(holder.img_cat);
 
-        }
 
     }
 
@@ -58,7 +61,7 @@ public class CategoryListAdapter extends RecyclerView.Adapter<CategoryListAdapte
         public ViewHolder(View view) {
             super(view);
             txt_cat = (TextView) view.findViewById(R.id.txt_cat);
-            img_cat=view.findViewById(R.id.img_cat);
+            img_cat = view.findViewById(R.id.img_cat);
 
         }
 
@@ -68,6 +71,7 @@ public class CategoryListAdapter extends RecyclerView.Adapter<CategoryListAdapte
     public CategoryListAdapter(Context context, List<ItemDetailModel> itemDetailModel) {
         this.context = context;
         this.itemDetailModel = itemDetailModel;
+
     }
 
 }

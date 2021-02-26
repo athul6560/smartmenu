@@ -57,7 +57,7 @@ public class DashboardActivity extends AppCompatActivity {
             e.printStackTrace();
         }
 
-        System.out.println("itemsize"+itemDetailModel.size());
+        System.out.println("itemsize"+itemDetailModel.get(1).getImage_url());
         categoryListAdapter=new CategoryListAdapter(DashboardActivity.this,itemDetailModel);
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getApplicationContext(), LinearLayoutManager.HORIZONTAL, false);
         rl_category.setLayoutManager(mLayoutManager);
