@@ -1,22 +1,28 @@
 package com.andria.qrscan.Activities;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 
 import android.Manifest;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.util.SparseArray;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.widget.RelativeLayout;
+import android.widget.Toast;
 
+import com.andria.qrscan.Activities.Model.ItemModel;
 import com.andria.qrscan.R;
+import com.google.android.gms.common.api.CommonStatusCodes;
 import com.google.android.gms.vision.CameraSource;
 import com.google.android.gms.vision.Detector;
 import com.google.android.gms.vision.barcode.Barcode;
 import com.google.android.gms.vision.barcode.BarcodeDetector;
+import com.google.gson.Gson;
 
 import java.io.IOException;
 
@@ -24,6 +30,8 @@ public class QRActivity extends AppCompatActivity {
     RelativeLayout ll_qr;
     SurfaceView surfaceView;
     boolean alreadyExecuted=false;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -84,23 +92,33 @@ public class QRActivity extends AppCompatActivity {
             @Override
             public void receiveDetections(Detector.Detections<Barcode> detections) {
                 final SparseArray<Barcode> barcodeSparseArray = detections.getDetectedItems();
-                if (barcodeSparseArray.size() > 0) {
 
+                if (barcodeSparseArray.size() > 0) {
+                 //   System.out.println("Size:- "+);
+                    Barcode barcode = barcodeSparseArray.valueAt(0);
+                    System.out.println(barcode.displayValue);
+                    SharedPreferences mPrefs = getPreferences(MODE_PRIVATE);
+
+                    ItemModel myObject = new ItemModel();
+//set variables of 'myObject', etc.
+
+
+                    Gson gson = new Gson();
+                    String json = gson.toJson(myObject);
+                    SmartMenuUtil.setItem(QRActivity.this,json);
                     if(!alreadyExecuted) {
                         Intent i2 = new Intent(QRActivity.this, WelcomeActivity.class);
-
+                        /*i2.putExtra("barcode", barcodeSparseArray.valueAt(0));
+                        setResult(CommonStatusCodes.SUCCESS, i2);*/
                         startActivity(i2);
-
                         alreadyExecuted = true;
                         finish();
                     }
-
-
-
-
-
                 }
             }
         });
     }
+
+
+
 }
