@@ -1,4 +1,4 @@
-package com.andria.qrscan.Activities.Model;
+package com.andria.qrscan.Model;
 
 import java.util.List;
 
