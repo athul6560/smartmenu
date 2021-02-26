@@ -15,14 +15,14 @@ import android.view.SurfaceView;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
-import com.andria.qrscan.Activities.Model.ItemModel;
+
 import com.andria.qrscan.R;
 import com.google.android.gms.common.api.CommonStatusCodes;
 import com.google.android.gms.vision.CameraSource;
 import com.google.android.gms.vision.Detector;
 import com.google.android.gms.vision.barcode.Barcode;
 import com.google.android.gms.vision.barcode.BarcodeDetector;
-import com.google.gson.Gson;
+
 
 import java.io.IOException;
 
@@ -94,22 +94,11 @@ public class QRActivity extends AppCompatActivity {
                 final SparseArray<Barcode> barcodeSparseArray = detections.getDetectedItems();
 
                 if (barcodeSparseArray.size() > 0) {
-                 //   System.out.println("Size:- "+);
                     Barcode barcode = barcodeSparseArray.valueAt(0);
-                    System.out.println(barcode.displayValue);
-                    SharedPreferences mPrefs = getPreferences(MODE_PRIVATE);
-
-                    ItemModel myObject = new ItemModel();
-
-
-
-                    Gson gson = new Gson();
-                    String json = gson.toJson(myObject);
+                    String json =barcode.displayValue;
                     SmartMenuUtil.setItem(QRActivity.this,json);
                     if(!alreadyExecuted) {
                         Intent i2 = new Intent(QRActivity.this, WelcomeActivity.class);
-                        /*i2.putExtra("barcode", barcodeSparseArray.valueAt(0));
-                        setResult(CommonStatusCodes.SUCCESS, i2);*/
                         startActivity(i2);
                         alreadyExecuted = true;
                         finish();

@@ -39,6 +39,7 @@ dependencies {
     /** QR scanner  **/
     implementation 'com.google.android.gms:play-services-vision:15.0.2'
 
+
     implementation "com.airbnb.android:lottie:$lottieVersion"
-    implementation 'com.google.code.gson:gson:2.8.5'
+
 }
