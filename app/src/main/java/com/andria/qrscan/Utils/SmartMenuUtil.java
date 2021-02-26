@@ -1,4 +1,4 @@
-package com.andria.qrscan.Activities;
+package com.andria.qrscan.Utils;
 
 import android.content.Context;
 import android.content.SharedPreferences;
