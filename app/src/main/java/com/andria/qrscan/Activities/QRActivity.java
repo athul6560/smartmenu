@@ -96,6 +96,7 @@ public class QRActivity extends AppCompatActivity {
                 if (barcodeSparseArray.size() > 0) {
                     Barcode barcode = barcodeSparseArray.valueAt(0);
                     String json =barcode.displayValue;
+                    System.out.println(json);
                     SmartMenuUtil.setItem(QRActivity.this,json);
                     if(!alreadyExecuted) {
                         Intent i2 = new Intent(QRActivity.this, WelcomeActivity.class);
