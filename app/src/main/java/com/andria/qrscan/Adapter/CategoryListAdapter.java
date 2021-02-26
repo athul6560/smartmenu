@@ -15,7 +15,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.andria.qrscan.Model.ItemDetailModel;
 import com.andria.qrscan.R;
 import com.bumptech.glide.Glide;
-import com.squareup.picasso.Picasso;
+
 
 import java.util.List;
 

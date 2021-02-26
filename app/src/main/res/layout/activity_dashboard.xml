@@ -15,7 +15,18 @@
         android:background="@color/green"
         android:elevation="2dp"
        >
-
+<RelativeLayout
+    android:layout_width="match_parent"
+    android:layout_height="70dp">
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_baseline_qr_code_scanner_24"
+        android:layout_centerVertical="true"
+        android:layout_alignParentRight="true"
+        android:id="@+id/qr_btn"
+        android:layout_marginRight="20dp"/>
+</RelativeLayout>
     </LinearLayout>
 
     <androidx.cardview.widget.CardView

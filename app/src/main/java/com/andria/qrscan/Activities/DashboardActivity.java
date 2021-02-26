@@ -5,7 +5,10 @@ import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.andria.qrscan.Adapter.CategoryListAdapter;
@@ -25,13 +28,20 @@ public class DashboardActivity extends AppCompatActivity {
     List<ItemDetailModel>  itemDetailModel = new ArrayList<>();
     RecyclerView rl_category;
     CategoryListAdapter categoryListAdapter;
+    private ImageView qrBtn;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dashboard);
         rl_category=findViewById(R.id.rl_category);
-
-
+        qrBtn=findViewById(R.id.qr_btn);
+        qrBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(DashboardActivity.this,QRActivity.class));
+                finish();
+            }
+        });
         String json = SmartMenuUtil.getItem(DashboardActivity.this);
         String formattedjson = json.replaceAll("\\s", "");
 
