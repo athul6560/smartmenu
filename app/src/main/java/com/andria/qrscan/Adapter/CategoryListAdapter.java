@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -38,12 +39,18 @@ public class CategoryListAdapter extends RecyclerView.Adapter<CategoryListAdapte
     public void onBindViewHolder(ViewHolder holder, int position) {
 
         holder.txt_cat.setText(itemDetailModel.get(position).getCategory());
-        Glide
-                .with(context)
+        Glide.with(context)
                 .load(itemDetailModel.get(position).image_url)
                 .centerCrop()
                 .placeholder(R.drawable.no_img)
                 .into(holder.img_cat);
+
+        holder.ll_category.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(context, itemDetailModel.get(position).getCategory(), Toast.LENGTH_SHORT).show();
+            }
+        });
 
 
     }
@@ -57,11 +64,13 @@ public class CategoryListAdapter extends RecyclerView.Adapter<CategoryListAdapte
     public static class ViewHolder extends RecyclerView.ViewHolder {
         private final TextView txt_cat;
         private final ImageView img_cat;
+        private final LinearLayout ll_category;
 
         public ViewHolder(View view) {
             super(view);
             txt_cat = (TextView) view.findViewById(R.id.txt_cat);
             img_cat = view.findViewById(R.id.img_cat);
+            ll_category=view.findViewById(R.id.ll_category);
 
         }
 

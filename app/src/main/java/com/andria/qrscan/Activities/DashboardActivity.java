@@ -12,6 +12,7 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.andria.qrscan.Adapter.CategoryListAdapter;
+import com.andria.qrscan.Adapter.ItemListAdapter;
 import com.andria.qrscan.Model.ItemDetailModel;
 import com.andria.qrscan.R;
 import com.andria.qrscan.Utils.SmartMenuUtil;
@@ -26,8 +27,9 @@ import java.util.List;
 public class DashboardActivity extends AppCompatActivity {
     ItemDetailModel item;
     List<ItemDetailModel>  itemDetailModel = new ArrayList<>();
-    RecyclerView rl_category;
+    RecyclerView rl_category,rl_detail_cat;
     CategoryListAdapter categoryListAdapter;
+    ItemListAdapter itemListAdapter;
     private ImageView qrBtn;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,6 +37,7 @@ public class DashboardActivity extends AppCompatActivity {
         setContentView(R.layout.activity_dashboard);
         rl_category=findViewById(R.id.rl_category);
         qrBtn=findViewById(R.id.qr_btn);
+        rl_detail_cat=findViewById(R.id.rl_detail_cat);
         qrBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -74,5 +77,14 @@ public class DashboardActivity extends AppCompatActivity {
         rl_category.setItemAnimator(new DefaultItemAnimator());
         rl_category.setAdapter(categoryListAdapter);
        //Toast.makeText(this, ""+itemDetailModel.get(0).getCategory(), Toast.LENGTH_SHORT).show();
+
+        itemListAdapter=new ItemListAdapter(DashboardActivity.this,itemDetailModel.get(0).getDishName(),
+                itemDetailModel.get(0).getPrice());
+        RecyclerView.LayoutManager mLayoutManager1 = new LinearLayoutManager(getApplicationContext());
+        rl_detail_cat.setLayoutManager(mLayoutManager1);
+        rl_detail_cat.setItemAnimator(new DefaultItemAnimator());
+        rl_detail_cat.setAdapter(itemListAdapter);
+
+
     }
 }
