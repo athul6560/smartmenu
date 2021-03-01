@@ -40,7 +40,7 @@ public class CategoryListAdapter extends RecyclerView.Adapter<CategoryListAdapte
 
         holder.txt_cat.setText(itemDetailModel.get(position).getCategory());
         Glide.with(context)
-                .load(itemDetailModel.get(position).image_url)
+                .load(itemDetailModel.get(position).category_image)
                 .centerCrop()
                 .placeholder(R.drawable.no_img)
                 .into(holder.img_cat);

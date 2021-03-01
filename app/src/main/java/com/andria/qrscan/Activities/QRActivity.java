@@ -5,10 +5,15 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 
 import android.Manifest;
+import android.app.DownloadManager;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
 import android.util.SparseArray;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
@@ -25,12 +30,13 @@ import com.google.android.gms.vision.barcode.Barcode;
 import com.google.android.gms.vision.barcode.BarcodeDetector;
 
 
+import java.io.File;
 import java.io.IOException;
 
 public class QRActivity extends AppCompatActivity {
     RelativeLayout ll_qr;
     SurfaceView surfaceView;
-    boolean alreadyExecuted=false;
+    boolean alreadyExecuted = false;
 
 
     @Override
@@ -44,6 +50,7 @@ public class QRActivity extends AppCompatActivity {
         createcamerasourse();
 
     }
+
 
     private void createcamerasourse() {
         BarcodeDetector barcodeDetector = new BarcodeDetector.Builder(this).build();
@@ -96,13 +103,17 @@ public class QRActivity extends AppCompatActivity {
 
                 if (barcodeSparseArray.size() > 0) {
                     Barcode barcode = barcodeSparseArray.valueAt(0);
-                    String json =barcode.displayValue;
+                    String json = barcode.displayValue;
                     System.out.println(json);
-                    SmartMenuUtil.setItem(QRActivity.this,json);
-                    if(!alreadyExecuted) {
+
+                    if (!alreadyExecuted) {
+
+                        download(json);
+                        alreadyExecuted = true;
+                        // SmartMenuUtil.setItem(QRActivity.this,json);
                         Intent i2 = new Intent(QRActivity.this, WelcomeActivity.class);
                         startActivity(i2);
-                        alreadyExecuted = true;
+
                         finish();
                     }
                 }
@@ -110,6 +121,24 @@ public class QRActivity extends AppCompatActivity {
         });
     }
 
+
+    private void download(String json) {
+
+        String url = json;
+        DownloadManager.Request request = new DownloadManager.Request(Uri.parse(url));
+        request.setDescription("Downloading...");
+        request.setTitle("Download");
+// in order for this if to run, you must use the android 3.2 to compile your app
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
+            request.allowScanningByMediaScanner();
+            request.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED);
+        }
+        request.setDestinationInExternalPublicDir(Environment.DIRECTORY_DOWNLOADS, "menu.txt");
+
+// get download service and enqueue file
+        DownloadManager manager = (DownloadManager) getSystemService(Context.DOWNLOAD_SERVICE);
+        manager.enqueue(request);
+    }
 
 
 }
