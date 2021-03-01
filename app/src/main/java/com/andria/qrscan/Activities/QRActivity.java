@@ -1,12 +1,15 @@
 package com.andria.qrscan.Activities;
 
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
 import android.Manifest;
 import android.app.DownloadManager;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
@@ -14,6 +17,7 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
+import android.util.Log;
 import android.util.SparseArray;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
@@ -37,20 +41,49 @@ public class QRActivity extends AppCompatActivity {
     RelativeLayout ll_qr;
     SurfaceView surfaceView;
     boolean alreadyExecuted = false;
+    private static final int PERMISSION_REQUEST_CODE = 1;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_q_r);
+        if (Build.VERSION.SDK_INT >= 23) {
+            if (checkPermission()) {
+                // Code for above or equal 23 API Oriented Device
+                // Your Permission granted already .Do next code
+            } else {
+                requestPermission(); // Code for permission
+            }
+        } else {
 
+            // Code for Below 23 API Oriented Device
+            // Do next code
+        }
         ll_qr = findViewById(R.id.ll_qr);
         surfaceView = (SurfaceView) findViewById(R.id.camerap);
 
         createcamerasourse();
 
+
     }
 
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        deletefiless();
+    }
+
+    private void deletefiless() {
+        File File = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS),"menu.txt");
+
+        System.out.println("ssdgsd"+File.exists());
+        if (File.exists()) {
+            boolean sf = File.delete();
+           //
+        }
+    }
 
     private void createcamerasourse() {
         BarcodeDetector barcodeDetector = new BarcodeDetector.Builder(this).build();
@@ -110,11 +143,12 @@ public class QRActivity extends AppCompatActivity {
 
                         download(json);
                         alreadyExecuted = true;
+                        Toast.makeText(QRActivity.this, "done", Toast.LENGTH_SHORT).show();
                         // SmartMenuUtil.setItem(QRActivity.this,json);
-                        Intent i2 = new Intent(QRActivity.this, WelcomeActivity.class);
+                      /*  Intent i2 = new Intent(QRActivity.this, WelcomeActivity.class);
                         startActivity(i2);
 
-                        finish();
+                        finish();*/
                     }
                 }
             }
@@ -140,5 +174,35 @@ public class QRActivity extends AppCompatActivity {
         manager.enqueue(request);
     }
 
+    private boolean checkPermission() {
+        int result = ContextCompat.checkSelfPermission(QRActivity.this, android.Manifest.permission.WRITE_EXTERNAL_STORAGE);
+        if (result == PackageManager.PERMISSION_GRANTED) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    private void requestPermission() {
+
+        if (ActivityCompat.shouldShowRequestPermissionRationale(QRActivity.this, android.Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
+            Toast.makeText(QRActivity.this, "Write External Storage permission allows us to do store images. Please allow this permission in App Settings.", Toast.LENGTH_LONG).show();
+        } else {
+            ActivityCompat.requestPermissions(QRActivity.this, new String[]{android.Manifest.permission.WRITE_EXTERNAL_STORAGE}, PERMISSION_REQUEST_CODE);
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
+        switch (requestCode) {
+            case PERMISSION_REQUEST_CODE:
+                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    Log.e("value", "Permission Granted, Now you can use local drive .");
+                } else {
+                    Log.e("value", "Permission Denied, You cannot use local drive .");
+                }
+                break;
+        }
+    }
 
 }

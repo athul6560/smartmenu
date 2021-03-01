@@ -111,9 +111,12 @@ public class SplashScreen extends AppCompatActivity {
 
         } else {
             requestPermission();
+
         }
 
     }
+
+
 
     private boolean checkPermission() {
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA)
