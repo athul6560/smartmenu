@@ -14,6 +14,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
@@ -34,8 +35,16 @@ import com.google.android.gms.vision.barcode.Barcode;
 import com.google.android.gms.vision.barcode.BarcodeDetector;
 
 
+import java.io.BufferedInputStream;
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 public class QRActivity extends AppCompatActivity {
     RelativeLayout ll_qr;
@@ -76,12 +85,12 @@ public class QRActivity extends AppCompatActivity {
     }
 
     private void deletefiless() {
-        File File = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS),"menu.txt");
+        File File = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS), "menu.txt");
 
-        System.out.println("ssdgsd"+File.exists());
+        System.out.println("ssdgsd" + File.exists());
         if (File.exists()) {
             boolean sf = File.delete();
-           //
+            //
         }
     }
 
@@ -141,38 +150,21 @@ public class QRActivity extends AppCompatActivity {
 
                     if (!alreadyExecuted) {
 
-                        download(json);
+
+                        new DownloadVideoAsyncTask(QRActivity.this).execute(json);
                         alreadyExecuted = true;
-                        Toast.makeText(QRActivity.this, "done", Toast.LENGTH_SHORT).show();
+                        // Toast.makeText(QRActivity.this, "done", Toast.LENGTH_SHORT).show();
                         // SmartMenuUtil.setItem(QRActivity.this,json);
-                      /*  Intent i2 = new Intent(QRActivity.this, WelcomeActivity.class);
+                        Intent i2 = new Intent(QRActivity.this, WelcomeActivity.class);
                         startActivity(i2);
 
-                        finish();*/
+                        finish();
                     }
                 }
             }
         });
     }
 
-
-    private void download(String json) {
-
-        String url = json;
-        DownloadManager.Request request = new DownloadManager.Request(Uri.parse(url));
-        request.setDescription("Downloading...");
-        request.setTitle("Download");
-// in order for this if to run, you must use the android 3.2 to compile your app
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
-            request.allowScanningByMediaScanner();
-            request.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED);
-        }
-        request.setDestinationInExternalPublicDir(Environment.DIRECTORY_DOWNLOADS, "menu.txt");
-
-// get download service and enqueue file
-        DownloadManager manager = (DownloadManager) getSystemService(Context.DOWNLOAD_SERVICE);
-        manager.enqueue(request);
-    }
 
     private boolean checkPermission() {
         int result = ContextCompat.checkSelfPermission(QRActivity.this, android.Manifest.permission.WRITE_EXTERNAL_STORAGE);
@@ -204,5 +196,93 @@ public class QRActivity extends AppCompatActivity {
                 break;
         }
     }
+
+    public class DownloadVideoAsyncTask extends AsyncTask<String, Integer, String> {
+
+        private Context mContext;
+
+        public DownloadVideoAsyncTask(Context context) {
+            mContext = context;
+        }
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+        }
+
+        @Override
+        protected String doInBackground(String... sUrl) {
+            InputStream input = null;
+            OutputStream output = null;
+            HttpURLConnection connection = null;
+            try {
+                URL url = new URL(sUrl[0]);
+                connection = (HttpURLConnection) url.openConnection();
+                connection.connect();
+
+                // expect HTTP 200 OK, so we don't mistakenly save error report
+                // instead of the file
+                if (connection.getResponseCode() != HttpURLConnection.HTTP_OK) {
+                    return "Server returned HTTP " + connection.getResponseCode()
+                            + " " + connection.getResponseMessage();
+                }
+
+                // this will be useful to display download percentage
+                // might be -1: server did not report the length
+                int fileLength = connection.getContentLength();
+
+                // download the file
+                input = connection.getInputStream();
+
+//            output = new FileOutputStream("/data/data/com.example.vadym.test1/textfile.txt");
+                output = new FileOutputStream(mContext.getExternalFilesDir(null) + "/menu.txt");
+                System.out.println(mContext.getExternalFilesDir(null));
+
+                byte data[] = new byte[4096];
+                long total = 0;
+                int count;
+                while ((count = input.read(data)) != -1) {
+                    // allow canceling with back button
+                    if (isCancelled()) {
+                        input.close();
+                        return null;
+                    }
+                    total += count;
+                    // publishing the progress....
+                    if (fileLength > 0) // only if total length is known
+                        publishProgress((int) (total * 100 / fileLength));
+                    output.write(data, 0, count);
+                }
+            } catch (Exception e) {
+                return e.toString();
+            } finally {
+                try {
+                    if (output != null)
+                        output.close();
+                    if (input != null)
+                        input.close();
+                } catch (IOException ignored) {
+                }
+
+                if (connection != null)
+                    connection.disconnect();
+            }
+            return null;
+        }
+
+        @Override
+        protected void onProgressUpdate(Integer... values) {
+            super.onProgressUpdate(values);
+            Log.d("ptg", "onProgressUpdate: " + values[0]);
+
+        }
+
+        @Override
+        protected void onPostExecute(String s) {
+            super.onPostExecute(s);
+
+        }
+    }
+
 
 }

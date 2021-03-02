@@ -37,19 +37,21 @@ public class WelcomeActivity extends AppCompatActivity {
         setContentView(R.layout.activity_welcome);
 
         readfile();
-        new Handler().postDelayed(new Runnable() {
+       /* new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
                 Intent i2 = new Intent(WelcomeActivity.this, DashboardActivity.class);
                 startActivity(i2);
                 finish();
             }
-        }, SPLASH_TIME_OUT);
+        }, SPLASH_TIME_OUT);*/
 
     }
 
     private void readfile() {
-        File file = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS), "menu.txt");
+        //File file = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS), "menu.txt");
+        String yourFilePath = WelcomeActivity.this.getExternalFilesDir(null) + "/" + "menu.txt";
+        File file = new File(yourFilePath);
         if (file.exists()) {//File Exists};}
 
 //Read text from file
@@ -73,4 +75,6 @@ public class WelcomeActivity extends AppCompatActivity {
             Toast.makeText(this, "no file", Toast.LENGTH_SHORT).show();
         }
     }
+
+
 }
