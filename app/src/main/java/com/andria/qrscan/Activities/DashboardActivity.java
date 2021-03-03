@@ -14,6 +14,7 @@ import android.widget.Toast;
 import com.andria.qrscan.Adapter.CategoryListAdapter;
 import com.andria.qrscan.Adapter.ItemListAdapter;
 import com.andria.qrscan.Model.ItemDetailModel;
+import com.andria.qrscan.Model.categoryModel;
 import com.andria.qrscan.R;
 import com.andria.qrscan.Utils.SmartMenuUtil;
 
@@ -22,7 +23,9 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 public class DashboardActivity extends AppCompatActivity {
     ItemDetailModel item;
@@ -62,7 +65,7 @@ public class DashboardActivity extends AppCompatActivity {
     }
 
     private void setCategoryRecycler() {
-        categoryListAdapter = new CategoryListAdapter(DashboardActivity.this, getfullJson());
+        categoryListAdapter = new CategoryListAdapter(DashboardActivity.this, sortdataforcategory(getfullJson()));
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getApplicationContext(), LinearLayoutManager.HORIZONTAL, false);
         rl_category.setLayoutManager(mLayoutManager);
         rl_category.setItemAnimator(new DefaultItemAnimator());
@@ -96,6 +99,22 @@ public class DashboardActivity extends AppCompatActivity {
             e.printStackTrace();
         }
         return itemList;
+    }
+
+    private List<categoryModel> sortdataforcategory(List<ItemDetailModel> getfullJson) {
+        List<categoryModel> categoryModel = new ArrayList<>();
+        for (int i = 0; i < getfullJson.size(); i++) {
+            categoryModel item = new categoryModel(getfullJson.get(i).getCategory(), getfullJson.get(i).getCategory_image());
+
+            categoryModel.add(item);
+        }
+        Set<categoryModel> s = new HashSet<categoryModel>();
+        s.addAll(categoryModel);
+        categoryModel.clear();
+        categoryModel.addAll(s);
+
+
+        return categoryModel;
     }
 
 

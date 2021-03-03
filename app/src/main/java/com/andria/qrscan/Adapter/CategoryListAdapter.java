@@ -14,6 +14,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.andria.qrscan.Model.ItemDetailModel;
+import com.andria.qrscan.Model.categoryModel;
 import com.andria.qrscan.R;
 import com.bumptech.glide.Glide;
 
@@ -22,7 +23,7 @@ import java.util.List;
 
 public class CategoryListAdapter extends RecyclerView.Adapter<CategoryListAdapter.ViewHolder> {
     Context context;
-    List<ItemDetailModel> itemDetailModel;
+    List<categoryModel> itemDetailModel;
 
 
     @Override
@@ -38,9 +39,9 @@ public class CategoryListAdapter extends RecyclerView.Adapter<CategoryListAdapte
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
 
-        holder.txt_cat.setText(itemDetailModel.get(position).getCategory());
+        holder.txt_cat.setText(itemDetailModel.get(position).getCname());
         Glide.with(context)
-                .load(itemDetailModel.get(position).category_image)
+                .load(itemDetailModel.get(position).getImage_url())
                 .centerCrop()
                 .placeholder(R.drawable.no_img)
                 .into(holder.img_cat);
@@ -48,7 +49,7 @@ public class CategoryListAdapter extends RecyclerView.Adapter<CategoryListAdapte
         holder.ll_category.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(context, itemDetailModel.get(position).getCategory(), Toast.LENGTH_SHORT).show();
+                Toast.makeText(context, itemDetailModel.get(position).getCname(), Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -77,7 +78,7 @@ public class CategoryListAdapter extends RecyclerView.Adapter<CategoryListAdapte
 
     }
 
-    public CategoryListAdapter(Context context, List<ItemDetailModel> itemDetailModel) {
+    public CategoryListAdapter(Context context, List<categoryModel> itemDetailModel) {
         this.context = context;
         this.itemDetailModel = itemDetailModel;
 

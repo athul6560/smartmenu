@@ -14,6 +14,7 @@ import android.widget.Toast;
 import com.andria.qrscan.Model.ItemDetailModel;
 import com.andria.qrscan.Model.ItemModel;
 import com.andria.qrscan.R;
+import com.andria.qrscan.Utils.SmartMenuUtil;
 
 
 import org.json.JSONArray;
@@ -37,14 +38,14 @@ public class WelcomeActivity extends AppCompatActivity {
         setContentView(R.layout.activity_welcome);
 
         readfile();
-       /* new Handler().postDelayed(new Runnable() {
+        new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
                 Intent i2 = new Intent(WelcomeActivity.this, DashboardActivity.class);
                 startActivity(i2);
                 finish();
             }
-        }, SPLASH_TIME_OUT);*/
+        }, SPLASH_TIME_OUT);
 
     }
 
@@ -71,6 +72,7 @@ public class WelcomeActivity extends AppCompatActivity {
             }
 
             Toast.makeText(this, ""+text, Toast.LENGTH_SHORT).show();
+            SmartMenuUtil.setItem(WelcomeActivity.this, String.valueOf(text));
         } else {
             Toast.makeText(this, "no file", Toast.LENGTH_SHORT).show();
         }
