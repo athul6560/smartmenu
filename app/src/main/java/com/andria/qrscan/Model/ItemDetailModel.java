@@ -6,6 +6,15 @@ public class ItemDetailModel {
              		public int price;
              		public int offer_price;
             		public String image_url;
+    public String category_image;
+
+    public String getCategory_image() {
+        return category_image;
+    }
+
+    public void setCategory_image(String category_image) {
+        this.category_image = category_image;
+    }
 
     public String getCategory() {
         return category;

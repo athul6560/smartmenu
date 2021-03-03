@@ -12,7 +12,9 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.andria.qrscan.Adapter.CategoryListAdapter;
+import com.andria.qrscan.Adapter.ItemListAdapter;
 import com.andria.qrscan.Model.ItemDetailModel;
+import com.andria.qrscan.Model.categoryModel;
 import com.andria.qrscan.R;
 import com.andria.qrscan.Utils.SmartMenuUtil;
 
@@ -21,34 +23,72 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 public class DashboardActivity extends AppCompatActivity {
     ItemDetailModel item;
-    List<ItemDetailModel>  itemDetailModel = new ArrayList<>();
-    RecyclerView rl_category;
+
+    RecyclerView rl_category, rl_detail_cat;
     CategoryListAdapter categoryListAdapter;
+    ItemListAdapter itemListAdapter;
     private ImageView qrBtn;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dashboard);
-        rl_category=findViewById(R.id.rl_category);
-        qrBtn=findViewById(R.id.qr_btn);
+        rl_category = findViewById(R.id.rl_category);
+        qrBtn = findViewById(R.id.qr_btn);
+        rl_detail_cat = findViewById(R.id.rl_detail_cat);
         qrBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivity(new Intent(DashboardActivity.this,QRActivity.class));
+                startActivity(new Intent(DashboardActivity.this, QRActivity.class));
                 finish();
             }
         });
+
+        setCategoryRecycler();
+        setItemRecycler();
+
+
+    }
+
+    private void setItemRecycler() {
+        itemListAdapter = new ItemListAdapter(DashboardActivity.this,getfullJson());
+        RecyclerView.LayoutManager mLayoutManager1 = new LinearLayoutManager(getApplicationContext());
+        rl_detail_cat.setLayoutManager(mLayoutManager1);
+        rl_detail_cat.setItemAnimator(new DefaultItemAnimator());
+        rl_detail_cat.setAdapter(itemListAdapter);
+    }
+
+    private void setCategoryRecycler() {
+       // categoryListAdapter = new CategoryListAdapter(DashboardActivity.this, sortdataforcategory(getfullJson()));
+        categoryListAdapter=new CategoryListAdapter(this,sortdataforcategory(getfullJson()), new CategoryListAdapter.OnCOAAccountClickListener() {
+            @Override
+            public void onClicked(categoryModel account) {
+                Toast.makeText(DashboardActivity.this, "dsvsd"+account.getCname(), Toast.LENGTH_SHORT).show();
+            }
+
+
+        });
+        RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getApplicationContext(), LinearLayoutManager.HORIZONTAL, false);
+        rl_category.setLayoutManager(mLayoutManager);
+        rl_category.setItemAnimator(new DefaultItemAnimator());
+        rl_category.setAdapter(categoryListAdapter);
+    }
+
+    private List<ItemDetailModel> getfullJson() {
+        List<ItemDetailModel> itemList = new ArrayList<>();
         String json = SmartMenuUtil.getItem(DashboardActivity.this);
         String formattedjson = json.replaceAll("\\s", "");
 
         try {
             JSONObject mainObject = new JSONObject(formattedjson);
             JSONArray array = mainObject.getJSONArray("Items");
-            System.out.println("itemlength"+array.length());
+            System.out.println("itemlength" + array.length());
 
             for (int i = 0; i < array.length(); i++) {
                 item = new ItemDetailModel();
@@ -57,22 +97,33 @@ public class DashboardActivity extends AppCompatActivity {
                 item.setCategory(itemobject.getString("category"));
                 item.setDishName(itemobject.getString("dishName"));
                 item.setImage_url(itemobject.getString("image_url"));
-              //  item.setOffer_price(itemobject.getInt("offer_price"));
+                item.setCategory_image(itemobject.getString("category_image"));
                 item.setPrice(itemobject.getInt("price"));
-                itemDetailModel.add(item);
+                itemList.add(item);
 
             }
 
         } catch (JSONException e) {
             e.printStackTrace();
         }
-
-        System.out.println("itemsize"+itemDetailModel.get(1).getImage_url());
-        categoryListAdapter=new CategoryListAdapter(DashboardActivity.this,itemDetailModel);
-        RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getApplicationContext(), LinearLayoutManager.HORIZONTAL, false);
-        rl_category.setLayoutManager(mLayoutManager);
-        rl_category.setItemAnimator(new DefaultItemAnimator());
-        rl_category.setAdapter(categoryListAdapter);
-       //Toast.makeText(this, ""+itemDetailModel.get(0).getCategory(), Toast.LENGTH_SHORT).show();
+        return itemList;
     }
+
+    private List<categoryModel> sortdataforcategory(List<ItemDetailModel> getfullJson) {
+        List<categoryModel> categoryModel = new ArrayList<>();
+        for (int i = 0; i < getfullJson.size(); i++) {
+            categoryModel item = new categoryModel(getfullJson.get(i).getCategory(), getfullJson.get(i).getCategory_image());
+
+            categoryModel.add(item);
+        }
+        Set<categoryModel> s = new HashSet<categoryModel>();
+        s.addAll(categoryModel);
+        categoryModel.clear();
+        categoryModel.addAll(s);
+
+
+        return categoryModel;
+    }
+
+
 }
