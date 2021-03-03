@@ -19,7 +19,7 @@ import com.bumptech.glide.Glide;
 import java.util.List;
 
 public class ItemListAdapter extends RecyclerView.Adapter<ItemListAdapter.ViewHolder> {
-    private final List<ItemDetailModel> list;
+    private List<ItemDetailModel> list;
     Context context;
 
 
@@ -77,6 +77,10 @@ public class ItemListAdapter extends RecyclerView.Adapter<ItemListAdapter.ViewHo
         }
 
 
+    }
+    public void updateList(List<ItemDetailModel> lists){
+        list = lists;
+        notifyDataSetChanged();
     }
 
 

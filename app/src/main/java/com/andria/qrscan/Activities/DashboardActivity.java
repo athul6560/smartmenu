@@ -7,7 +7,10 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
 
@@ -34,6 +37,7 @@ public class DashboardActivity extends AppCompatActivity {
     CategoryListAdapter categoryListAdapter;
     ItemListAdapter itemListAdapter;
     private ImageView qrBtn;
+    private EditText search;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,6 +46,7 @@ public class DashboardActivity extends AppCompatActivity {
         rl_category = findViewById(R.id.rl_category);
         qrBtn = findViewById(R.id.qr_btn);
         rl_detail_cat = findViewById(R.id.rl_detail_cat);
+        search = findViewById(R.id.search_Edittetxt);
         qrBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -49,7 +54,27 @@ public class DashboardActivity extends AppCompatActivity {
                 finish();
             }
         });
+        search.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
 
+                // TODO Auto-generated method stub
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                filter(editable.toString());
+            }
+
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+                // TODO Auto-generated method stub
+            }
+
+
+
+        });
         setCategoryRecycler();
         setItemRecycler(getfullJson());
 
@@ -62,6 +87,18 @@ public class DashboardActivity extends AppCompatActivity {
         rl_detail_cat.setLayoutManager(mLayoutManager1);
         rl_detail_cat.setItemAnimator(new DefaultItemAnimator());
         rl_detail_cat.setAdapter(itemListAdapter);
+    }
+    void filter(String text){
+        List<ItemDetailModel> temp = new ArrayList();
+        for(ItemDetailModel d: getfullJson()){
+            //or use .equal(text) with you want equal match
+            //use .toLowerCase() for better matches
+            if(d.getDishName().toLowerCase().contains(text)){
+                temp.add(d);
+            }
+        }
+        //update recyclerview
+        itemListAdapter.updateList(temp);
     }
 
     private void setCategoryRecycler() {
