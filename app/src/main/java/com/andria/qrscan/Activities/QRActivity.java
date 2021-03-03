@@ -155,10 +155,7 @@ public class QRActivity extends AppCompatActivity {
                         alreadyExecuted = true;
                         // Toast.makeText(QRActivity.this, "done", Toast.LENGTH_SHORT).show();
                         // SmartMenuUtil.setItem(QRActivity.this,json);
-                        Intent i2 = new Intent(QRActivity.this, WelcomeActivity.class);
-                        startActivity(i2);
 
-                        finish();
                     }
                 }
             }
@@ -280,6 +277,10 @@ public class QRActivity extends AppCompatActivity {
         @Override
         protected void onPostExecute(String s) {
             super.onPostExecute(s);
+            Intent i2 = new Intent(QRActivity.this, WelcomeActivity.class);
+            startActivity(i2);
+
+            finish();
 
         }
     }

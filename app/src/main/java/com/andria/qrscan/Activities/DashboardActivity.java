@@ -65,7 +65,15 @@ public class DashboardActivity extends AppCompatActivity {
     }
 
     private void setCategoryRecycler() {
-        categoryListAdapter = new CategoryListAdapter(DashboardActivity.this, sortdataforcategory(getfullJson()));
+       // categoryListAdapter = new CategoryListAdapter(DashboardActivity.this, sortdataforcategory(getfullJson()));
+        categoryListAdapter=new CategoryListAdapter(this,sortdataforcategory(getfullJson()), new CategoryListAdapter.OnCOAAccountClickListener() {
+            @Override
+            public void onClicked(categoryModel account) {
+                Toast.makeText(DashboardActivity.this, "dsvsd"+account.getCname(), Toast.LENGTH_SHORT).show();
+            }
+
+
+        });
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getApplicationContext(), LinearLayoutManager.HORIZONTAL, false);
         rl_category.setLayoutManager(mLayoutManager);
         rl_category.setItemAnimator(new DefaultItemAnimator());

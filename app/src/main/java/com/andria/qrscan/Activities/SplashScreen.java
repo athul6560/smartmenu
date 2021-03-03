@@ -9,6 +9,7 @@ import androidx.core.view.GestureDetectorCompat;
 import android.Manifest;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
@@ -25,12 +26,12 @@ import com.andria.qrscan.R;
 
 public class SplashScreen extends AppCompatActivity {
 
-
+    final String PREFS_NAME = "MyPrefsFile";
     private ImageView firstBox, secondBox, thirdBox;
     private GestureDetectorCompat gestureDetectorCompat;
     private final static int PERMISSION_REQUEST_CODE = 200;
     private final static int TIME = 200;
-
+    SharedPreferences settings;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -39,7 +40,7 @@ public class SplashScreen extends AppCompatActivity {
         secondBox = findViewById(R.id.imageView3);
         thirdBox = findViewById(R.id.imageView4);
 
-
+         settings = getSharedPreferences(PREFS_NAME, 0);
         animation(firstBox);
         new Handler().postDelayed(new Runnable() {
             @Override
@@ -87,10 +88,25 @@ public class SplashScreen extends AppCompatActivity {
                                float velocityX, float velocityY) {
             if (event2.getY() < event1.getY()) {
                 if (checkPermission()) {
-                    Intent i2 = new Intent(SplashScreen.this, QRActivity.class);
-                    startActivity(i2);
-                    overridePendingTransition(R.anim.slide_in_up, R.anim.slide_out_up);
-                    finish();
+
+                    if (settings.getBoolean("my_first_time", true)) {
+                        //the app is being launched for first time, do something
+                        Intent i2 = new Intent(SplashScreen.this, QRActivity.class);
+                        startActivity(i2);
+                        overridePendingTransition(R.anim.slide_in_up, R.anim.slide_out_up);
+                        finish();
+
+                        // first time task
+
+                        // record the fact that the app has been started at least once
+                        settings.edit().putBoolean("my_first_time", false).commit();
+                    }else {
+                        Intent i2 = new Intent(SplashScreen.this, DashboardActivity.class);
+                        startActivity(i2);
+                        overridePendingTransition(R.anim.slide_in_up, R.anim.slide_out_up);
+                        finish();
+                    }
+
 
                 } else {
                     requestPermission();

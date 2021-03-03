@@ -71,7 +71,7 @@ public class WelcomeActivity extends AppCompatActivity {
                 System.out.println("sfdvsvedf"+e);
             }
 
-            Toast.makeText(this, ""+text, Toast.LENGTH_SHORT).show();
+         //   Toast.makeText(this, ""+text, Toast.LENGTH_SHORT).show();
             SmartMenuUtil.setItem(WelcomeActivity.this, String.valueOf(text));
         } else {
             Toast.makeText(this, "no file", Toast.LENGTH_SHORT).show();

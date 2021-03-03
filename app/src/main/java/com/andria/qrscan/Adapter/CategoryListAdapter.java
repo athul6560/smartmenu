@@ -24,8 +24,10 @@ import java.util.List;
 public class CategoryListAdapter extends RecyclerView.Adapter<CategoryListAdapter.ViewHolder> {
     Context context;
     List<categoryModel> itemDetailModel;
-
-
+    private final OnCOAAccountClickListener onCOAAccountClickListener;
+    public interface OnCOAAccountClickListener {
+        void onClicked(categoryModel account);
+    }
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
 
@@ -48,8 +50,8 @@ public class CategoryListAdapter extends RecyclerView.Adapter<CategoryListAdapte
 
         holder.ll_category.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
-                Toast.makeText(context, itemDetailModel.get(position).getCname(), Toast.LENGTH_SHORT).show();
+            public void onClick(View view) {
+                onCOAAccountClickListener.onClicked(itemDetailModel.get(position));
             }
         });
 
@@ -78,10 +80,10 @@ public class CategoryListAdapter extends RecyclerView.Adapter<CategoryListAdapte
 
     }
 
-    public CategoryListAdapter(Context context, List<categoryModel> itemDetailModel) {
+    public CategoryListAdapter(Context context, List<categoryModel> itemDetailModel, OnCOAAccountClickListener onCOAAccountClickListener) {
         this.context = context;
         this.itemDetailModel = itemDetailModel;
-
+        this.onCOAAccountClickListener = onCOAAccountClickListener;
     }
 
 }
