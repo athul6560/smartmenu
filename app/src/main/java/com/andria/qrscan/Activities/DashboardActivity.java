@@ -51,13 +51,13 @@ public class DashboardActivity extends AppCompatActivity {
         });
 
         setCategoryRecycler();
-        setItemRecycler();
+        setItemRecycler(getfullJson());
 
 
     }
 
-    private void setItemRecycler() {
-        itemListAdapter = new ItemListAdapter(DashboardActivity.this,getfullJson());
+    private void setItemRecycler(List<ItemDetailModel> itemDetailModels) {
+        itemListAdapter = new ItemListAdapter(DashboardActivity.this,itemDetailModels);
         RecyclerView.LayoutManager mLayoutManager1 = new LinearLayoutManager(getApplicationContext());
         rl_detail_cat.setLayoutManager(mLayoutManager1);
         rl_detail_cat.setItemAnimator(new DefaultItemAnimator());
@@ -69,7 +69,8 @@ public class DashboardActivity extends AppCompatActivity {
         categoryListAdapter=new CategoryListAdapter(this,sortdataforcategory(getfullJson()), new CategoryListAdapter.OnCOAAccountClickListener() {
             @Override
             public void onClicked(categoryModel account) {
-                Toast.makeText(DashboardActivity.this, "dsvsd"+account.getCname(), Toast.LENGTH_SHORT).show();
+                List<ItemDetailModel> listItem=  getcategoryitemList(account.getCname());
+                setItemRecycler(listItem);
             }
 
 
@@ -78,6 +79,16 @@ public class DashboardActivity extends AppCompatActivity {
         rl_category.setLayoutManager(mLayoutManager);
         rl_category.setItemAnimator(new DefaultItemAnimator());
         rl_category.setAdapter(categoryListAdapter);
+    }
+
+    private List<ItemDetailModel> getcategoryitemList(String cname) {
+        List<ItemDetailModel> list= new ArrayList<>();
+        for(int i=0;i<getfullJson().size();i++){
+            if(getfullJson().get(i).getCategory().equals(cname)){
+                list.add(getfullJson().get(i));
+            }
+        }
+        return list;
     }
 
     private List<ItemDetailModel> getfullJson() {
