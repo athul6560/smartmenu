@@ -8,11 +8,14 @@ import androidx.core.content.ContextCompat;
 
 import android.Manifest;
 import android.app.DownloadManager;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
@@ -22,6 +25,8 @@ import android.util.Log;
 import android.util.SparseArray;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
+import android.view.View;
+import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
@@ -51,12 +56,29 @@ public class QRActivity extends AppCompatActivity {
     SurfaceView surfaceView;
     boolean alreadyExecuted = false;
     private static final int PERMISSION_REQUEST_CODE = 1;
-
+  ProgressBar dialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_q_r);
+        dialog=findViewById(R.id.progressBar);
+        dialog.setVisibility(View.GONE);
+        if(!isNetworkAvailable()){
+            AlertDialog.Builder builder1 = new AlertDialog.Builder(QRActivity.this);
+            builder1.setMessage("Please make sure you have an active internet connection!!");
+            builder1.setCancelable(false);
+            builder1.setPositiveButton(
+                    "Ok",
+                    new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+                            dialog.cancel();
+                            finish();
+                        }
+                    });
+            AlertDialog alert11 = builder1.create();
+            alert11.show();
+        }
         if (Build.VERSION.SDK_INT >= 23) {
             if (checkPermission()) {
                 // Code for above or equal 23 API Oriented Device
@@ -205,10 +227,11 @@ public class QRActivity extends AppCompatActivity {
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
-        }
+            dialog.setVisibility(View.VISIBLE);}
 
         @Override
         protected String doInBackground(String... sUrl) {
+
             InputStream input = null;
             OutputStream output = null;
             HttpURLConnection connection = null;
@@ -277,12 +300,19 @@ public class QRActivity extends AppCompatActivity {
         @Override
         protected void onPostExecute(String s) {
             super.onPostExecute(s);
+
             Intent i2 = new Intent(QRActivity.this, WelcomeActivity.class);
             startActivity(i2);
 
             finish();
 
         }
+    }
+    private boolean isNetworkAvailable() {
+        ConnectivityManager connectivityManager
+                = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
+        return activeNetworkInfo != null && activeNetworkInfo.isConnected();
     }
 
 
